@@ -4,14 +4,14 @@ import (
 	"math"
 )
 
-func SameitemInMap(dim1, dim2 map[string]interface{}) map[string]int {
+func SameitemInMap(dim1, dim2 map[string]float64) map[string]int {
 	same := map[string]int{}
 	for key, _ := range dim1 {
 		if _, ok := dim2[key]; ok {
 			same[key] = 1
 		}
 	}
-
+	return same
 }
 
 // 欧几里得距离
@@ -22,7 +22,7 @@ func EuclideanDistance(dim1, dim2 map[string]float64) float64 {
 	}
 	var powSum float64
 	for key, _ := range same {
-		powSum += math.Pow(dim1[key], 2) + math.Pow(dim2[key], 2)
+		powSum += math.Pow(dim1[key]-dim2[key], 2)
 	}
 
 	return 1 / (1 + math.Sqrt(powSum))
@@ -48,9 +48,9 @@ func PearsonScore(dim1, dim2 map[string]float64) float64 {
 		powSum2 += math.Pow(dim2[key], 2)
 		pSum += dim1[key] * dim2[key]
 	}
-
-	num := pSum - (sum1 * sum2 / n)
-	den := math.Sqrt(powSum1-math.Pow(sum1, 2)/n) * (powSum2 - math.Pow(sum2, 2)/n)
+	lenNum := float64(n)
+	num := pSum - (sum1 * sum2 / lenNum)
+	den := math.Sqrt((powSum1 - math.Pow(sum1, 2)/lenNum) * (powSum2 - math.Pow(sum2, 2)/lenNum))
 	if den == 0 {
 		return 0
 	}
